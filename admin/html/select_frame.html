@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+	<title>title</title>
+	<link rel="stylesheet" type="text/css" href="../css/api.css" />
+	<style>
+	html,body{
+		color: black;
+	}
+	table.gridtable {
+		width: 100%;
+		/*font-family: verdana,arial,sans-serif;*/
+		font-size:11px;
+		color:black;
+		border-width: 1px;
+		border-color: #666666;
+		/*border-collapse: collapse;*/
+	}
+	table.gridtable th {
+		border-width: 1px;
+		padding: 8px;
+		/*border-style: solid;*/
+		border-color: #666666;
+		background-color: #dedede;
+	}
+	table.gridtable td {
+		border-width: 1px;
+		padding:6px 0 6px 0;
+		border-style: solid;
+		border-color: #666666;
+		background-color: #ffffff;
+	}
+	.danhao{
+		overflow-x: scroll;
+	}
+</style>
+</head>
+<body>
+	<table class="gridtable" id="list">
+
+	</table>
+
+</body>
+<script type="text/template" id="template">
+	<tr>  <th>商品名称</th><th>介绍</th><th>收货地址</th><th>收货人</th><th>电话</th><th>用户</th><th>单号</th></tr>
+	{{~it:value:index}}
+	<tr>
+		<td>{{=value.warename}}</td>
+		<td>{{=value.description}}</td>
+		<td>{{=value.address}}{{=value.house}}</td>
+		<td>{{=value.shoppingname}}</td>
+		<td>{{=value.mobile}}</td>
+		<td>{{=value.username}}</td>
+		{{? value.danhao}}
+		<td class="danhao">{{=value.danhao}}</td>
+		{{??}}
+		<td tapmode onclick="adddanhao('{{=value.id}}')">上传单号</td>
+		{{?}}
+	</tr>
+	{{~}} 
+
+
+</script>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/doT.min.js"></script>
+<script type="text/javascript" src="../script/SHA1.js"></script>
+<script type="text/javascript">
+	var activity;
+	apiready = function(){
+		getAddressList();
+	};
+	function getAddressList(){
+		activity = api.require('UILoading');
+		activity.keyFrame({
+			rect: {
+				w: 80,
+				h: 100
+			},
+			styles: {
+				bg: 'rgba(0,0,0,0.5)',
+				corner: 5,
+				interval: 50,
+				frame: {
+					w: 80,
+					h: 80
+				}
+			}
+		});
+		var now = Date.now();
+      //5FB51794-FCDC-1FE9-19E0-xxxxxxxxxxxx换成自己appkey
+      var appKey = SHA1("A6099267504667"+"UZ"+"8FC0173C-B395-B797-D516-7A6CD23939B3"+"UZ"+now)+"."+now
+      var params={
+      	fields:{},
+      	fields: {},
+      	where: {
+      	},
+      	skip:0
+      }
+      params=$api.jsonToStr(params);
+      api.ajax({
+      	url: 'http://d.apicloud.com/mcm/api/shoppinginformation?filter='+params,
+      	method: 'get',
+      	headers: {
+      		"X-APICloud-AppId": "A6099267504667",
+      		"X-APICloud-AppKey":   appKey
+      	},
+
+      },function(ret, err){
+      	if (ret) {
+         // 模板渲染
+         updateWareList(ret);
+     } else {
+     	api.toast({
+     		msg: err.msg,
+     		duration: 2000,
+     		location: 'bottom'
+     	});
+     }
+ });
+  }
+  function updateWareList(_data){
+  	_data.reverse();
+  	var list=$api.byId('list');
+  	var tempFn=doT.template($api.byId('template').innerHTML);
+  	var resultText=tempFn(_data)
+  	$api.html(list, resultText);
+    // 优化
+    api.parseTapmode();
+    activity.closeKeyFrame()
+}
+
+function adddanhao(_id){
+	alert(_id);
+	var FNScanner = api.require('FNScanner');
+	FNScanner.open({
+		autorotation: true
+	}, function(ret, err) {
+		if (ret) {
+			if (ret.content) {
+				createdanhao(_id,ret.content);
+			}
+		} 
+	});
+
+}
+function createdanhao(_id,_danhao){
+	var now = Date.now();
+	var appKey = SHA1("A6099267504667"+"UZ"+"8FC0173C-B395-B797-D516-7A6CD23939B3"+"UZ"+now)+"."+now;
+	api.ajax({
+		url: 'https://d.apicloud.com/mcm/api/shoppinginformation/'+_id,
+		method: 'put',
+		data: {
+			values:{
+				"danhao":_danhao,
+			}
+		},
+		headers: {
+			"X-APICloud-AppId": "A6099267504667",
+			"X-APICloud-AppKey":   appKey
+		}
+	},function(ret, err){
+		if (ret) {
+			api.toast({
+				msg: '欧克了',
+				duration: 2000,
+				location: 'bottom'
+			});
+		} 
+	});
+
+
+}
+
+</script>
+</html>
