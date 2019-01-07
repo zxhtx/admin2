@@ -44,7 +44,7 @@
 
 </body>
 <script type="text/template" id="template">
-	<tr>  <th>商品名称</th><th>介绍</th><th>收货地址</th><th>收货人</th><th>电话</th><th>用户</th><th>单号</th></tr>
+	<tr>  <th>商品名称</th><th>介绍</th><th>收货地址</th><th>收货人</th><th>电话</th><th>用户</th><th>单号</th><th>收款图</th></tr>
 	{{~it:value:index}}
 	<tr>
 		<td>{{=value.warename}}</td>
@@ -58,6 +58,7 @@
 		{{??}}
 		<td tapmode onclick="adddanhao('{{=value.id}}')">上传单号</td>
 		{{?}}
+		<td tapmode onclick="openimgWin('{{=value.priceimg}}')">点击查看</td>
 	</tr>
 	{{~}} 
 
@@ -167,9 +168,20 @@ function createdanhao(_id,_danhao){
 				duration: 2000,
 				location: 'bottom'
 			});
+			
 		} 
 	});
 
+
+}
+function openimgWin(_path){
+	api.openWin({
+	    name: 'priceimg',
+	    url: './priceimg.html',
+	    pageParam: {
+	        imgpath: _path
+	    }
+	});
 
 }
 
