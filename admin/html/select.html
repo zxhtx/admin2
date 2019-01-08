@@ -51,14 +51,14 @@
 
 <body>
     <header id="header">
-        <div class="back" tapmode onclick="api.closeWin()"></div>
+        <div class="back"  tapmode onclick="closewin()"></div>
         <h1>查询订单</h1>
     </header>
 </body>
 <script type="text/javascript" src="../script/api.js"></script>
 <script type="text/javascript">
     apiready = function() {
-
+api.setScreenOrientation({orientation:"landscape_left"})
        var header=$api.byId('header');
          api.setStatusBarStyle({
             style: 'light',
@@ -71,7 +71,7 @@
             name: 'select_frame',
             url: './select_frame.html',
             rect: {
-                x: 0,
+                x: 'auto',
                 y: headerH,
                 w: 'auto',
                 h: 'auto'
@@ -81,7 +81,11 @@
             bounces: true
         });
     };
- 
+ 	function closewin(){
+ 		// portrait_down 
+ 		api.setScreenOrientation({orientation:"portrait_down"});
+ 		api.closeWin();
+ 	}
 </script>
 
 </html>

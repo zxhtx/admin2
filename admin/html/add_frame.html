@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+	<title>title</title>
+	<link rel="stylesheet" type="text/css" href="../css/api.css" />
+	<style>
+	table.gridtable {
+		width: 100%;
+		/*font-family: verdana,arial,sans-serif;*/
+		font-size:11px;
+		color:black;
+		border-width: 1px;
+		border-color: #666666;
+		/*border-collapse: collapse;*/
+	}
+	table.gridtable th {
+		border-width: 1px;
+		padding: 8px;
+		/*border-style: solid;*/
+		border-color: #666666;
+		background-color: #dedede;
+	}
+	table.gridtable td {
+		border-width: 1px;
+		padding:6px 0 6px 0;
+		border-style: solid;
+		border-color: #666666;
+		background-color: #fff;
+	}
+	.red{
+		color: red;
+	}
+</style>
+</head>
+<body>
+	<table class="gridtable" id="list">
+		<tr>
+			<th>商品所属类</th>
+			<th>商品名</th>
+			<th>介绍</th>
+			<th>单价</th>
+			<th>封面</th>
+			<th>轮播图0</th>
+			<th>轮播图1</th>
+			<th>轮播图2</th>
+			<th>上传</th>
+		</tr>
+		<tr>
+			<td>
+				<select id="test" tapmode onchange="select()" name="">
+					<option value="">请选择</option>
+					<option value="56c80dc88d04c83d3d1dedf3">男鞋</option>
+					<option value="56c80dc383af652643474b6d">女鞋</option>
+					<option value="56c80dc031da9e480de1cb49">运动鞋</option>
+					<option value="56c80db78d04c83d3d1dedea">休闲鞋</option>
+					<option value="56c80da883af652643474b6b">配件</option>
+				</select>
+			</td>
+			<td><input type="text" id="name"></td>
+			<td><input type="text" id="jieshao"></td>
+			<td><input type="text" id="price"></td>
+			<td tapmode onclick="uploaderimg(3)">上传图片</td>
+			<td tapmode onclick="uploaderimg(0)">上传图片</td>
+			<td tapmode onclick="uploaderimg(1)">上传图片</td>
+			<td tapmode onclick="uploaderimg(2)">上传图片</td>
+			<td class="red"><input type="button" value="上传" tapmode onclick="save()"></td>
+		</tr>
+	</table>
+
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/SHA1.js"></script>
+<script type="text/javascript">
+	var addInfo={};
+	var wareInfoId;
+	var now = Date.now();
+	var appKey = SHA1("A6099267504667"+"UZ"+"8FC0173C-B395-B797-D516-7A6CD23939B3"+"UZ"+now)+"."+now;
+	apiready = function(){
+
+	};
+	function select(){
+		var myselect=$api.byId("test");
+		var index=myselect.selectedIndex ;
+		addInfo.wareTypeId=myselect.options[index].value;
+
+	}
+	function uploaderimg(_data){
+		api.actionSheet({
+			title: '选择',
+			cancelTitle: '取消',
+			buttons: ['拍照','相册']
+		}, function(ret, err){
+			if( ret ){
+				var sourceTypes=['camera','album']
+				if (ret.buttonIndex == (sourceTypes.length + 1)) {
+					return;
+				}
+				api.getPicture({
+					sourceType: sourceTypes[ret.buttonIndex-1],
+					allowEdit: true,
+					quality: 100,
+					targetWidth: 600,
+					targetHeight: 600,
+					saveToPhotoAlbum: false
+				}, function(ret, err){ 
+					if(ret){
+						uploadAtavar(ret.data,_data);
+						
+					}else{
+						api.toast({
+							msg: err.msg,
+							duration: 2000,
+							location: 'bottom'
+						});
+					}
+				});
+
+			}else{
+				api.toast({
+					msg: err.msg,
+					duration: 2000,
+					location: 'bottom'
+				});
+			}
+		});
+
+	}
+	function uploadAtavar(_data,number){
+		var name=$api.byId('name').value;
+		var price=$api.byId('price').value;
+		var jieshao=$api.byId('jieshao').value;
+
+
+		api.ajax({
+			url: 'https://d.apicloud.com/mcm/api/file',
+			method: 'post',
+			data: {
+				values: { 
+					filename: 'icon'
+				},
+				files: { 
+					file: _data
+				}
+			},
+			headers: {
+				"X-APICloud-AppId": "A6099267504667",
+				"X-APICloud-AppKey":   appKey,
+			},
+		},function(ret, err){
+			if (ret) {
+				addInfo.thumbnail=ret.url;
+				addInfo.name=name;
+				addInfo.price=price;
+				addInfo.description=jieshao;
+				uploaderimgs(ret,number)
+			} else {
+				api.toast({
+					msg: err.msg,
+					duration: 2000,
+					location: 'bottom'
+				});
+			}
+		});
+	}
+
+	function uploaderimgs(_data,number){
+		if (number==0) {
+			api.ajax({
+				url: 'https://d.apicloud.com/mcm/api/wareInfo',
+				method: 'post',
+				data: {
+					values: { 
+						picture0:_data.url
+					}
+				},
+				headers: {
+					"X-APICloud-AppId": "A6099267504667",
+					"X-APICloud-AppKey":   appKey,
+					 // "Authorization": "5c1391e410a053b34b94d3ae"
+					},
+				},function(ret, err){
+					if (ret) {
+						wareInfoId=ret.id;
+						addInfo.wareInfo=ret.id;
+						api.toast({
+							msg: '上传成功',
+							duration: 2000,
+							location: 'bottom'
+						});
+					} 
+				});
+		}else if (number==1){
+			api.ajax({
+				url: 'https://d.apicloud.com/mcm/api/wareInfo/'+wareInfoId,
+				method: 'put',
+				data: {
+					values: { 
+						picture1: _data.url
+					}
+				},
+				headers: {
+					"X-APICloud-AppId": "A6099267504667",
+					"X-APICloud-AppKey":   appKey,
+					 // "Authorization": "5c1391e410a053b34b94d3ae"
+					},
+				},function(ret, err){
+					if (ret) {
+						api.toast({
+							msg: '上传成功',
+							duration: 2000,
+							location: 'bottom'
+						});
+					}
+				});
+		}else{
+			api.ajax({
+				url: 'https://d.apicloud.com/mcm/api/wareInfo/'+wareInfoId,
+				method: 'put',
+				data: {
+					values: { 
+						picture2: _data.url
+					}
+				},
+				headers: {
+					"X-APICloud-AppId": "A6099267504667",
+					"X-APICloud-AppKey":   appKey,
+					 // "Authorization": "5c1391e410a053b34b94d3ae"
+					},
+				},function(ret, err){
+					if (ret) {
+						api.toast({
+							msg: '上传成功',
+							duration: 2000,
+							location: 'bottom'
+						});
+					}
+				});
+		}
+		
+	}
+
+	function save(){
+			api.ajax({
+				url: 'https://d.apicloud.com/mcm/api/ware',
+				method: 'post',
+				data: {
+					values:addInfo
+				},
+				headers: {
+					"X-APICloud-AppId": "A6099267504667",
+					"X-APICloud-AppKey":   appKey,
+					 // "Authorization": "5c1391e410a053b34b94d3ae"
+					},
+				},function(ret, err){
+					if (ret) {
+						api.toast({
+							msg: '上传成功',
+							duration: 2000,
+							location: 'bottom'
+						});
+					} 
+				});
+
+	}
+
+</script>
+</html>

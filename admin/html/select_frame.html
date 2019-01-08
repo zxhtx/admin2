@@ -35,6 +35,9 @@
 	.danhao{
 		overflow-x: scroll;
 	}
+	.red{
+		color: red;
+	}
 </style>
 </head>
 <body>
@@ -44,11 +47,12 @@
 
 </body>
 <script type="text/template" id="template">
-	<tr>  <th>商品名称</th><th>介绍</th><th>收货地址</th><th>收货人</th><th>电话</th><th>用户</th><th>单号</th><th>收款图</th><th>删除</th></tr>
+	<tr>  <th>商品名称</th><th>介绍</th><th>价格</th><th>收货地址</th><th>收货人</th><th>电话</th><th>用户</th><th>单号</th><th>收款图</th><th>是否支付</th><th>删除</th></tr>
 	{{~it:value:index}}
 	<tr>
 		<td>{{=value.warename}}</td>
 		<td>{{=value.description}}</td>
+		<td class="red">{{=value.price}}</td>
 		<td>{{=value.address}}{{=value.house}}</td>
 		<td>{{=value.shoppingname}}</td>
 		<td>{{=value.mobile}}</td>
@@ -59,7 +63,13 @@
 		<td tapmode onclick="adddanhao('{{=value.id}}')">上传单号</td>
 		{{?}}
 		<td tapmode onclick="openimgWin('{{=value.priceimg}}')">点击查看</td>
-		<td tapmode onclick="no('{{=value.id}}')">删除</td>
+		{{? value.priceimg==null}}
+		<td>未支付</td>
+		{{??}}
+		<td>已支付</td>
+		{{?}}
+
+		<td class="red" tapmode onclick="no('{{=value.id}}')">删除</td>
 	</tr>
 	{{~}} 
 
@@ -73,6 +83,9 @@
 	var now = Date.now();
 	var appKey = SHA1("A6099267504667"+"UZ"+"8FC0173C-B395-B797-D516-7A6CD23939B3"+"UZ"+now)+"."+now;
 	apiready = function(){
+		api.setScreenOrientation({
+			orientation: 'auto'
+		});
 		getAddressList();
 	};
 	function getAddressList(){
@@ -136,7 +149,6 @@
 }
 
 function adddanhao(_id){
-	alert(_id);
 	var FNScanner = api.require('FNScanner');
 	FNScanner.open({
 		autorotation: true
@@ -178,28 +190,40 @@ function createdanhao(_id,_danhao){
 }
 function openimgWin(_path){
 	api.openWin({
-	    name: 'priceimg',
-	    url: './priceimg.html',
-	    pageParam: {
-	        imgpath: _path
-	    }
+		name: 'priceimg',
+		url: './priceimg.html',
+		pageParam: {
+			imgpath: _path
+		}
 	});
 
 }
 function no(_id){
-      api.ajax({
-      	url: 'http://d.apicloud.com/mcm/api/shoppinginformation/'+_id,
-      	method: 'delete',
-      	headers: {
-      		"X-APICloud-AppId": "A6099267504667",
-      		"X-APICloud-AppKey":   appKey
-      	},
+	api.confirm({
+		title: '提示',
+		msg: '确定删除?',
+		buttons: ['确定', '取消']
+	}, function(ret, err){
+		if( ret.buttonIndex==1 ){
+			api.ajax({
+				url: 'http://d.apicloud.com/mcm/api/shoppinginformation/'+_id,
+				method: 'delete',
+				headers: {
+					"X-APICloud-AppId": "A6099267504667",
+					"X-APICloud-AppKey":   appKey
+				},
 
-      },function(ret, err){
-      	if (ret) {
-      		getAddressList();
-      	} 
-      });
+			},function(ret, err){
+				if (ret) {
+					getAddressList();
+				} 
+			});
+
+		}else{
+			return;
+		}
+	});
+
 }
 
 </script>
