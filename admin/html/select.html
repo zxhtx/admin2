@@ -58,7 +58,7 @@
 <script type="text/javascript" src="../script/api.js"></script>
 <script type="text/javascript">
     apiready = function() {
-api.setScreenOrientation({orientation:"landscape_left"})
+    api.setScreenOrientation({orientation:"auto"});
        var header=$api.byId('header');
          api.setStatusBarStyle({
             style: 'light',
@@ -83,7 +83,7 @@ api.setScreenOrientation({orientation:"landscape_left"})
     };
  	function closewin(){
  		// portrait_down 
- 		api.setScreenOrientation({orientation:"portrait_down"});
+ 	    api.setScreenOrientation({orientation:"auto"});
  		api.closeWin();
  	}
 </script>
