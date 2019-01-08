@@ -157,7 +157,10 @@
 			},
 		},function(ret, err){
 			if (ret) {
-				addInfo.thumbnail=ret.url;
+				if (number==3) {
+					addInfo.thumbnail=ret.url;
+				}
+				
 				addInfo.name=name;
 				addInfo.price=price;
 				addInfo.description=jieshao;
