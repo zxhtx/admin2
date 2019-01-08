@@ -38,6 +38,9 @@
 	.red{
 		color: red;
 	}
+	.green{
+		color: green;
+	}
 </style>
 </head>
 <body>
@@ -66,7 +69,7 @@
 		{{? value.priceimg==null}}
 		<td>未支付</td>
 		{{??}}
-		<td>已支付</td>
+		<td class="green">已支付</td>
 		{{?}}
 
 		<td class="red" tapmode onclick="no('{{=value.id}}')">删除</td>
@@ -83,9 +86,7 @@
 	var now = Date.now();
 	var appKey = SHA1("A6099267504667"+"UZ"+"8FC0173C-B395-B797-D516-7A6CD23939B3"+"UZ"+now)+"."+now;
 	apiready = function(){
-		api.setScreenOrientation({
-			orientation: 'auto'
-		});
+		
 		getAddressList();
 	};
 	function getAddressList(){
@@ -128,6 +129,7 @@
       	if (ret) {
          // 模板渲染
          updateWareList(ret);
+
      } else {
      	api.toast({
      		msg: err.msg,
@@ -157,6 +159,8 @@ function adddanhao(_id){
 			if (ret.content) {
 				createdanhao(_id,ret.content);
 			}
+			// getAddressList();
+
 		} 
 	});
 
@@ -182,6 +186,10 @@ function createdanhao(_id,_danhao){
 				duration: 2000,
 				location: 'bottom'
 			});
+			setTimeout(function(){
+				getAddressList();
+			},2000)
+			
 			
 		} 
 	});

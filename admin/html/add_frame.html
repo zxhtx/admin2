@@ -34,7 +34,10 @@
 	}
 	input{
 		border: none;
-		border: 0px;
+		outline: none;
+		outline:medium;
+		width: 100%;
+		height: 100%;
 	}
 </style>
 </head>
@@ -246,15 +249,15 @@
 	}
 
 	function save(){
-			api.ajax({
-				url: 'https://d.apicloud.com/mcm/api/ware',
-				method: 'post',
-				data: {
-					values:addInfo
-				},
-				headers: {
-					"X-APICloud-AppId": "A6099267504667",
-					"X-APICloud-AppKey":   appKey,
+		api.ajax({
+			url: 'https://d.apicloud.com/mcm/api/ware',
+			method: 'post',
+			data: {
+				values:addInfo
+			},
+			headers: {
+				"X-APICloud-AppId": "A6099267504667",
+				"X-APICloud-AppKey":   appKey,
 					 // "Authorization": "5c1391e410a053b34b94d3ae"
 					},
 				},function(ret, err){
