@@ -41,6 +41,9 @@
 	.green{
 		color: green;
 	}
+	.blue{
+		color: blue;
+	}
 </style>
 </head>
 <body>
@@ -55,19 +58,29 @@
 	<tr>
 		<td>{{=value.warename}}</td>
 		<td>{{=value.description}}</td>
-		<td class="red">{{=value.price}}</td>
+		<td class="blue">{{=value.price}}</td>
 		<td>{{=value.address}}{{=value.house}}</td>
 		<td>{{=value.shoppingname}}</td>
 		<td>{{=value.mobile}}</td>
 		<td>{{=value.username}}</td>
-		{{? value.danhao}}
+		
+
+		{{? value.danhao }}
 		<td class="danhao">{{=value.danhao}}</td>
+		{{?? value.priceimg==null}}
+		<td class="red">不可操作</td>
 		{{??}}
-		<td tapmode onclick="adddanhao('{{=value.id}}')">上传单号</td>
+		<td class="green" tapmode onclick="adddanhao('{{=value.id}}')">上传单号</td>
 		{{?}}
-		<td tapmode onclick="openimgWin('{{=value.priceimg}}')">点击查看</td>
+
 		{{? value.priceimg==null}}
-		<td>未支付</td>
+		<td class="red">不可操作</td>
+		{{??}}
+		<td class="green" tapmode onclick="openimgWin('{{=value.priceimg}}')">点击查看</td>
+		{{?}}
+
+		{{? value.priceimg==null}}
+		<td class="red">未支付</td>
 		{{??}}
 		<td class="green">已支付</td>
 		{{?}}
@@ -159,7 +172,6 @@ function adddanhao(_id){
 			if (ret.content) {
 				createdanhao(_id,ret.content);
 			}
-			// getAddressList();
 
 		} 
 	});
