@@ -53,12 +53,15 @@
 
 </body>
 <script type="text/template" id="template">
-	<tr>  <th>商品名称</th><th>介绍</th><th>价格</th><th>收货地址</th><th>收货人</th><th>电话</th><th>用户</th><th>单号</th><th>收款图</th><th>是否支付</th><th>删除</th></tr>
+	<tr> <th>时间</th> <th>商品名称</th><th>介绍</th><th>价格</th><th>颜色</th><th>鞋码</th><th>收货地址</th><th>收货人</th><th>电话</th><th>用户</th><th>单号</th><th>收款图</th><th>是否支付</th><th>删除</th></tr>
 	{{~it:value:index}}
 	<tr>
+		<td>{{=value.createdAt}}</td>
 		<td>{{=value.warename}}</td>
 		<td>{{=value.description}}</td>
 		<td class="blue">{{=value.price}}</td>
+		<td class="red">{{=value.color}}</td>
+		<td class="red">{{=value.size}}</td>
 		<td>{{=value.address}}{{=value.house}}</td>
 		<td>{{=value.shoppingname}}</td>
 		<td>{{=value.mobile}}</td>
