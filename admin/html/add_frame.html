@@ -50,6 +50,7 @@
 			<th>介绍</th>
 			<th>单价</th>
 			<th>鞋码</th>
+			<th>颜色</th>
 			<th>封面</th>
 			<th>轮播图0</th>
 			<th>轮播图1</th>
@@ -71,6 +72,7 @@
 			<td><input type="text" id="jieshao"></td>
 			<td><input type="text" id="price"></td>
 			<td><input type="text" id="size"></td>
+			<td><input type="text" id="color"></td>
 			<td tapmode onclick="uploaderimg(3)">上传图片</td>
 			<td tapmode onclick="uploaderimg(0)">上传图片</td>
 			<td tapmode onclick="uploaderimg(1)">上传图片</td>
@@ -141,6 +143,18 @@
 		var name=$api.byId('name').value;
 		var price=$api.byId('price').value;
 		var jieshao=$api.byId('jieshao').value;
+		var size=$api.byId('size').value;
+		var arrsize=size.split("-");
+		var start=arrsize[0];
+		var end=arrsize[1];
+		var addarr=[];
+		for (var i = start; i <=end; i++) {
+			addarr.push(i);
+		};
+		var color=$api.byId('color').value;
+		var arrcolor=color.split("-");
+	
+
 
 
 		api.ajax({
@@ -167,6 +181,8 @@
 				addInfo.name=name;
 				addInfo.price=price;
 				addInfo.description=jieshao;
+				addInfo.size=addarr;
+				addInfo.color=arrcolor;
 				uploaderimgs(ret,number)
 			} else {
 				api.toast({
