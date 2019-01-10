@@ -209,10 +209,11 @@
 					msg: record
 				});
 			}
-			
+			alert(1)
 			// 页面执行搜索
 			api.execScript({
 				name: 'search',
+				frameName: 'search_frame',
 				script: "searchval('"+ record +"')"
 			});
 			//可以使用api.execScript跨页面执行脚本。也可以使用自定义监听。
@@ -227,7 +228,7 @@
 			db = api.require('db');
 			db.openDatabase({
 				name : 'record',
-				path:'fs://history.db'
+				path:'fs://soushuo.db'
 			}, function(ret, err) {
 				if (ret.status) {
 					initdb();
