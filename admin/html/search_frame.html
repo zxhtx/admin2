@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+	<title>title</title>
+	<link rel="stylesheet" type="text/css" href="../css/api.css"/>
+	<style>
+
+ table.gridtable {
+    width: 100%;
+    /*font-family: verdana,arial,sans-serif;*/
+    font-size:11px;
+    color:black;
+    border-width: 1px;
+    border-color: #666666;
+    /*border-collapse: collapse;*/
+}
+table.gridtable th {
+    border-width: 1px;
+    padding: 8px;
+    /*border-style: solid;*/
+    border-color: #666666;
+    background-color: #dedede;
+}
+table.gridtable td {
+    border-width: 1px;
+    padding:6px 0 6px 0;
+    border-style: solid;
+    border-color: #666666;
+    background-color: #fff;
+}
+.red{
+    color: red;
+}
+
+</style>
+</head>
+<body>
+    <table class="gridtable" id="list">
+       <tr><th>index</th> <th>商品名称</th><th>介绍</th><th>价格</th><th>颜色</th><th>鞋码</th><th>收货地址</th><th>收货人</th><th>电话</th><th>用户</th><th>删除</th></tr>
+
+   </table>
+
+</body>
+<script type="text/template" id="template">
+
+    {{~it:value:index}}
+    <tr>
+        <td>{{=index}}</td>
+        <td>{{=value.warename}}</td>
+        <td>{{=value.description}}</td>
+        <td class="blue">{{=value.price}}</td>
+        <td class="red">{{=value.color}}</td>
+        <td class="red">{{=value.size}}</td>
+        <td>{{=value.address}}{{=value.house}}</td>
+        <td>{{=value.shoppingname}}</td>
+        <td>{{=value.mobile}}</td>
+        <td class="red">{{=value.username}}</td>
+        
+
+        <td class="red" tapmode onclick="no('{{=value.id}}')">删除</td>
+    </tr>
+    {{~}}
+
+</script>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/SHA1.js"></script>
+<script type="text/javascript" src="../script/doT.min.js"></script>
+<script type="text/javascript">
+    apiready = function() {
+        init();
+        // getWareList();
+        initRefresh();
+        initEventListenter();
+
+    };
+    var searchvalue;
+    var activity ;
+    var wareTypeList;
+    var skip=0;
+    var LIMIT=10;
+    function init(){
+     wareTypeList=$api.getStorage('WareTypeList');
+ }
+ function openWareWin(_wareId){
+   api.openWin({
+    name: 'ware',
+    url: './ware.html',
+    pageParam: {
+        wareId: _wareId
+    }
+});
+
+}
+    var now = Date.now();
+      //5FB51794-FCDC-1FE9-19E0-xxxxxxxxxxxx换成自己appkey
+      var appKey = SHA1("A6099267504667"+"UZ"+"8FC0173C-B395-B797-D516-7A6CD23939B3"+"UZ"+now)+"."+now
+// 获取列表页数据
+function searchval(val,_LoadMore){
+	// alert($api.jsonToStr($api.getStorage('history_list')))
+	// alert(val)
+	searchvalue=val;
+    // alert(val)
+    activity = api.require('UILoading');
+    activity.keyFrame({
+        rect: {
+            w: 80,
+            h: 100
+        },
+        styles: {
+            bg: 'rgba(0,0,0,0.5)',
+            corner: 5,
+            interval: 50,
+            frame: {
+                w: 80,
+                h: 80
+            }
+        }
+    });
+
+
+      if (_LoadMore) {
+        skip+=LIMIT;
+    }else{
+        skip=0;
+    }
+    var params={
+        fields:{},
+        fields: {},
+        where: {
+            "username":{"like":val},
+        },
+        skip:skip,
+        limit:LIMIT
+    }
+    params=$api.jsonToStr(params);
+    api.ajax({
+        url: 'http://d.apicloud.com/mcm/api/shoppinginformation?filter='+params,
+        method: 'get',
+        headers: {
+            "X-APICloud-AppId": "A6099267504667",
+            "X-APICloud-AppKey":   appKey
+        },
+        
+    },function(ret, err){
+        if (ret) {
+          // 隐藏下拉刷新
+          // api.refreshHeaderLoadDone();
+         // 模板渲染
+         // alert($api.jsonToStr(ret))
+         api.refreshHeaderLoadDone()
+       
+         
+         updateWareList(ret,_LoadMore);
+     } else {
+         api.toast({
+             msg: err.msg,
+             duration: 2000,
+             location: 'bottom'
+         });
+     }
+ });
+}
+function updateWareList(_data,_LoadMore){
+    var list=$api.byId('list');
+    var tempFn=doT.template($api.byId('template').innerHTML);
+    var resultText=tempFn(_data)
+    if (_LoadMore) {
+        $api.append(list, resultText);
+    }else{
+        $api.append(list, resultText);
+    }
+    // 优化
+    api.parseTapmode();
+    activity.closeKeyFrame();
+}
+
+
+// 监听 
+function initEventListenter(){
+    api.addEventListener({
+        name:'scrolltobottom',
+        extra:{
+            threshold:100
+        }
+    }, function(ret, err){        
+       searchval(searchvalue,true);
+   });
+}
+// 下拉刷新
+function initRefresh(){
+    api.setCustomRefreshHeaderInfo({
+        bgColor: '#C0C0C0',
+        isScale: true
+    }, function() {
+        searchval(searchvalue);
+        
+    });
+
+}
+function no(_id){
+    api.confirm({
+        title: '提示',
+        msg: '确定删除?',
+        buttons: ['确定', '取消']
+    }, function(ret, err){
+        if( ret.buttonIndex==1 ){
+            api.ajax({
+                url: 'http://d.apicloud.com/mcm/api/shoppinginformation/'+_id,
+                method: 'delete',
+                headers: {
+                    "X-APICloud-AppId": "A6099267504667",
+                    "X-APICloud-AppKey":   appKey
+                },
+
+            },function(ret, err){
+                if (ret) {
+                    getAddressList();
+                } 
+            });
+
+        }else{
+            return;
+        }
+    });
+
+}
+</script>
+</html>
