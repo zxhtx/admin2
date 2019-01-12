@@ -216,7 +216,7 @@
 				</div>
 			</div>
 			<div class="control">
-				<img class="no" src="../image/jian.png" tapmode onclick="no('{{=value.id}}')">
+				<img class="no" src="../image/jian.png" tapmode onclick="no('{{=value.id}}','{{=value.wareInfo}}')">
 			</div>
 
 		</div>
@@ -377,7 +377,7 @@ function initRefresh(){
 	});
 
 }
-function no(_data){
+function no(id,_data){
 	event.stopPropagation();
 	api.confirm({
 		title: '提示',
@@ -389,7 +389,28 @@ function no(_data){
       //5FB51794-FCDC-1FE9-19E0-xxxxxxxxxxxx换成自己appkey
       var appKey = SHA1("A6099267504667"+"UZ"+"8FC0173C-B395-B797-D516-7A6CD23939B3"+"UZ"+now)+"."+now
       api.ajax({
-      	url: 'http://d.apicloud.com/mcm/api/ware/'+_data,
+      	url: 'http://d.apicloud.com/mcm/api/ware/'+id,
+      	method: 'delete',
+      	headers: {
+      		"X-APICloud-AppId": "A6099267504667",
+      		"X-APICloud-AppKey":   appKey
+      	},
+
+      },function(ret, err){
+      	if (ret) {
+      		delwareinfo(_data);
+      	} 
+      });
+  }
+});
+	
+}
+function delwareinfo(_data){
+	var now = Date.now();
+      //5FB51794-FCDC-1FE9-19E0-xxxxxxxxxxxx换成自己appkey
+      var appKey = SHA1("A6099267504667"+"UZ"+"8FC0173C-B395-B797-D516-7A6CD23939B3"+"UZ"+now)+"."+now
+      api.ajax({
+      	url: 'http://d.apicloud.com/mcm/api/wareInfo/'+_data,
       	method: 'delete',
       	headers: {
       		"X-APICloud-AppId": "A6099267504667",
@@ -401,12 +422,9 @@ function no(_data){
       		getWareList();
       	} 
       });
+
+
   }
-});
-	
-
-}
-
 </script>
 
 </html>

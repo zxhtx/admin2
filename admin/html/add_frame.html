@@ -55,6 +55,8 @@
 			<th>轮播图0</th>
 			<th>轮播图1</th>
 			<th>轮播图2</th>
+			<th>轮播图3</th>
+			<th>轮播图4</th>
 			<th>上传</th>
 		</tr>
 		<tr>
@@ -63,8 +65,8 @@
 					<option value="">请选择</option>
 					<option value="56c80da883af652643474b6b">男鞋</option>
 					<option value="56c80db78d04c83d3d1dedea">女鞋</option>
-					<option value="56c80dc031da9e480de1cb49">运动鞋</option>
-					<option value="56c80dc383af652643474b6d">休闲鞋</option>
+					<option value="56c80dc031da9e480de1cb49">男装</option>
+					<option value="56c80dc383af652643474b6d">女装</option>
 					<option value="56c80dc88d04c83d3d1dedf3">配件</option>
 				</select>
 			</td>
@@ -73,10 +75,12 @@
 			<td><input type="text" id="price"></td>
 			<td><input type="text" id="size"></td>
 			<td><input type="text" id="color"></td>
-			<td tapmode onclick="uploaderimg(3)">上传图片</td>
+			<td tapmode onclick="uploaderimg(6)">上传图片</td>
 			<td tapmode onclick="uploaderimg(0)">上传图片</td>
 			<td tapmode onclick="uploaderimg(1)">上传图片</td>
 			<td tapmode onclick="uploaderimg(2)">上传图片</td>
+			<td tapmode onclick="uploaderimg(3)">上传图片</td>
+			<td tapmode onclick="uploaderimg(4)">上传图片</td>
 			<td class="red"><input type="button" value="上传" tapmode onclick="save()"></td>
 		</tr>
 	</table>
@@ -143,17 +147,26 @@
 		var name=$api.byId('name').value;
 		var price=$api.byId('price').value;
 		var jieshao=$api.byId('jieshao').value;
-		var size=$api.byId('size').value;
-		var arrsize=size.split("-");
-		var start=arrsize[0];
-		var end=arrsize[1];
-		var addarr=[];
-		for (var i = start; i <=end; i++) {
-			addarr.push(i);
-		};
+
+		if (addInfo.wareTypeId=='56c80da883af652643474b6b' || addInfo.wareTypeId=='56c80db78d04c83d3d1dedea'  ) {
+			var size=$api.byId('size').value;
+			var arrsize=size.split("-");
+			var start=arrsize[0];
+			var end=arrsize[1];
+			var addarr=[];
+			for (var i = start; i <=end; i++) {
+				addarr.push(i);
+			};
+
+		}else {
+			var size=$api.byId('size').value;
+			var addarr=size.split("-");
+
+		}
+
 		var color=$api.byId('color').value;
 		var arrcolor=color.split("-");
-	
+
 
 
 
@@ -174,10 +187,10 @@
 			},
 		},function(ret, err){
 			if (ret) {
-				if (number==3) {
+				if (number==6) {
 					addInfo.thumbnail=ret.url;
 				}
-				
+
 				addInfo.name=name;
 				addInfo.price=price;
 				addInfo.description=jieshao;
@@ -243,7 +256,7 @@
 						});
 					}
 				});
-		}else{
+		}else if (number==2){
 			api.ajax({
 				url: 'https://d.apicloud.com/mcm/api/wareInfo/'+wareInfoId,
 				method: 'put',
@@ -266,8 +279,56 @@
 						});
 					}
 				});
+		}else if (number==3){
+			api.ajax({
+				url: 'https://d.apicloud.com/mcm/api/wareInfo/'+wareInfoId,
+				method: 'put',
+				data: {
+					values: { 
+						picture3: _data.url
+					}
+				},
+				headers: {
+					"X-APICloud-AppId": "A6099267504667",
+					"X-APICloud-AppKey":   appKey,
+					 // "Authorization": "5c1391e410a053b34b94d3ae"
+					},
+				},function(ret, err){
+					if (ret) {
+						api.toast({
+							msg: '上传成功',
+							duration: 2000,
+							location: 'bottom'
+						});
+					}
+				});
+
+		}else{
+			api.ajax({
+				url: 'https://d.apicloud.com/mcm/api/wareInfo/'+wareInfoId,
+				method: 'put',
+				data: {
+					values: { 
+						picture4: _data.url
+					}
+				},
+				headers: {
+					"X-APICloud-AppId": "A6099267504667",
+					"X-APICloud-AppKey":   appKey,
+					 // "Authorization": "5c1391e410a053b34b94d3ae"
+					},
+				},function(ret, err){
+					if (ret) {
+						api.toast({
+							msg: '上传成功',
+							duration: 2000,
+							location: 'bottom'
+						});
+					}
+				});
+
 		}
-		
+
 	}
 
 	function save(){
