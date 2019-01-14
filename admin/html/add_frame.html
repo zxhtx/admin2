@@ -49,8 +49,9 @@
 			<th>商品名</th>
 			<th>介绍</th>
 			<th>单价</th>
-			<th>鞋码</th>
+			<th>码数</th>
 			<th>颜色</th>
+			<th>商家</th>
 			<th>封面</th>
 			<th>轮播图0</th>
 			<th>轮播图1</th>
@@ -75,6 +76,7 @@
 			<td><input type="text" id="price"></td>
 			<td><input type="text" id="size"></td>
 			<td><input type="text" id="color"></td>
+			<td><input type="text" id="shangjia"></td>
 			<td tapmode onclick="uploaderimg(6)">上传图片</td>
 			<td tapmode onclick="uploaderimg(0)">上传图片</td>
 			<td tapmode onclick="uploaderimg(1)">上传图片</td>
@@ -147,6 +149,7 @@
 		var name=$api.byId('name').value;
 		var price=$api.byId('price').value;
 		var jieshao=$api.byId('jieshao').value;
+		var  shangjia=$api.byId('shangjia').value;
 
 		if (addInfo.wareTypeId=='56c80da883af652643474b6b' || addInfo.wareTypeId=='56c80db78d04c83d3d1dedea'  ) {
 			var size=$api.byId('size').value;
@@ -196,6 +199,7 @@
 				addInfo.description=jieshao;
 				addInfo.size=addarr;
 				addInfo.color=arrcolor;
+				addInfo.shangjia=shangjia;
 				uploaderimgs(ret,number)
 			} else {
 				api.toast({
