@@ -46,21 +46,6 @@
 	<table class="gridtable" id="list">
 		<tr>
 			<th>商品所属类</th>
-			<th>商品名</th>
-			<th>介绍</th>
-			<th>单价</th>
-			<th>码数</th>
-			<th>颜色</th>
-			<th>商家</th>
-			<th>封面</th>
-			<th>轮播图0</th>
-			<th>轮播图1</th>
-			<th>轮播图2</th>
-			<th>轮播图3</th>
-			<th>轮播图4</th>
-			<th>上传</th>
-		</tr>
-		<tr>
 			<td>
 				<select id="test" tapmode onchange="select()" name="">
 					<option value="">请选择</option>
@@ -71,18 +56,77 @@
 					<option value="56c80dc88d04c83d3d1dedf3">配件</option>
 				</select>
 			</td>
+		</tr>
+		<tr>
+			<th>商品名</th>
 			<td><input type="text" id="name"></td>
+		</tr>
+		<tr>
+			<th>介绍</th>
 			<td><input type="text" id="jieshao"></td>
+			
+		</tr>
+		<tr>
+			<th>单价</th>
 			<td><input type="text" id="price"></td>
+			
+
+		</tr>
+		<tr>
+			<th>码数</th>
 			<td><input type="text" id="size"></td>
+			
+		</tr>
+
+		<tr>
+			<th>颜色</th>
 			<td><input type="text" id="color"></td>
+			
+
+		</tr>
+		<tr>
+			<th>商家</th>
 			<td><input type="text" id="shangjia"></td>
+			
+
+		</tr>
+		<tr>
+			<th>封面</th>
 			<td tapmode onclick="uploaderimg(6)">上传图片</td>
+			
+
+		</tr>
+		<tr>
+			<th>轮播图0</th>
 			<td tapmode onclick="uploaderimg(0)">上传图片</td>
+			
+
+		</tr>
+		<tr>
+			<th>轮播图1</th>
 			<td tapmode onclick="uploaderimg(1)">上传图片</td>
+
+		</tr>
+		
+		<tr>
+			<th>轮播图2</th>
 			<td tapmode onclick="uploaderimg(2)">上传图片</td>
+			
+		</tr>
+		<tr>
+			<th>轮播图3</th>
 			<td tapmode onclick="uploaderimg(3)">上传图片</td>
+
+		</tr>
+		<tr>
+			<th>轮播图4</th>
+
 			<td tapmode onclick="uploaderimg(4)">上传图片</td>
+			
+		</tr>
+		
+		<tr>
+			<th>上传</th>	
 			<td class="red"><input type="button" value="上传" tapmode onclick="save()"></td>
 		</tr>
 	</table>
