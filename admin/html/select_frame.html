@@ -63,9 +63,9 @@
 		<td class="red">{{=value.color}}</td>
 		<td class="red">{{=value.size}}</td>
 		<td class="red">{{=value.shangjia}}</td>
-		<td>{{=value.address}}{{=value.house}}</td>
-		<td>{{=value.shoppingname}}</td>
-		<td>{{=value.mobile}}</td>
+		<td tapmode onclick="fuzhi('{{=value.address}}{{=value.house}}')">{{=value.address}}{{=value.house}}</td>
+		<td tapmode onclick="fuzhi('{{=value.shoppingname}}')" >{{=value.shoppingname}}</td>
+		<td tapmode onclick="fuzhi('{{=value.mobile}}')">{{=value.mobile}}</td>
 		<td>{{=value.username}}</td>
 		
 
@@ -92,7 +92,6 @@
 		<td class="red" tapmode onclick="no('{{=value.id}}')">删除</td>
 	</tr>
 	{{~}} 
-
 
 </script>
 <script type="text/javascript" src="../script/api.js"></script>
@@ -327,6 +326,22 @@ function no(_id){
 		}
 	});
 
+}
+
+function fuzhi(_data){
+	 var clipBoard = api.require('clipBoard');
+          clipBoard.set({
+            value: _data
+        }, function(ret, err) {
+            if (ret) {
+                api.toast({
+                    msg: '复制成功',
+                    duration: 2000,
+                    location: 'bottom'
+                });
+
+            }
+        });
 }
 
 </script>
