@@ -40,6 +40,10 @@
 		height: 100%;
 
 	}
+	/*a:visited{color:red;} */
+	.imgcolor{
+		color: red;
+	}
 </style>
 </head>
 <body>
@@ -92,36 +96,35 @@
 		</tr>
 		<tr>
 			<th>封面</th>
-			<td tapmode onclick="uploaderimg(6)">上传图片</td>
+			<td tapmode onclick="uploaderimg(6,this)">上传图片</td>
 			
 
 		</tr>
 		<tr>
 			<th>轮播图0</th>
-			<td tapmode onclick="uploaderimg(0)">上传图片</td>
+			<td tapmode onclick="uploaderimg(0,this)">上传图片</td>
 			
 
 		</tr>
 		<tr>
 			<th>轮播图1</th>
-			<td tapmode onclick="uploaderimg(1)">上传图片</td>
+			<td tapmode onclick="uploaderimg(1,this)">上传图片</td>
 
 		</tr>
 		
 		<tr>
 			<th>轮播图2</th>
-			<td tapmode onclick="uploaderimg(2)">上传图片</td>
+			<td tapmode onclick="uploaderimg(2,this)">上传图片</td>
 			
 		</tr>
 		<tr>
 			<th>轮播图3</th>
-			<td tapmode onclick="uploaderimg(3)">上传图片</td>
+			<td tapmode onclick="uploaderimg(3,this)">上传图片</td>
 
 		</tr>
 		<tr>
 			<th>轮播图4</th>
-
-			<td tapmode onclick="uploaderimg(4)">上传图片</td>
+			<td tapmode onclick="uploaderimg(4,this)">上传图片</td>
 			
 		</tr>
 		
@@ -148,7 +151,8 @@
 		addInfo.wareTypeId=myselect.options[index].value;
 
 	}
-	function uploaderimg(_data){
+	function uploaderimg(_data,_this){
+		$api.addCls(_this, 'imgcolor');
 		api.actionSheet({
 			title: '选择',
 			cancelTitle: '取消',
