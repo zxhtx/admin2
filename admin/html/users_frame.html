@@ -37,16 +37,22 @@
 </head>
 <body>
 	<table class="gridtable" id="list">
-		<tr><th>index</th> <th>用户</th><th>删除</th></tr>
+		
 
 	</table>
 </body>
 <script type="text/template" id="template">
-
+<tr><th>index</th> <th>用户</th><th>推荐人数</th><th>删除</th></tr>
 	{{~it:value:index}}
+
 	<tr>
 		<td>{{=index}}</td>
 		<td >{{=value.username}}</td>
+		{{? value.count==undefined}}
+		<td  tapmode onclick="add('{{=value.id}}','{{=value.count}}')">0</td>
+		{{??}}
+		<td  tapmode onclick="add('{{=value.id}}','{{=value.count}}')">{{=value.count}}</td>
+		{{?}}
 		<td class="red" tapmode onclick="no('{{=value.id}}')">删除</td>
 	</tr>
 	{{~}}
@@ -59,28 +65,29 @@
 	apiready = function(){
 		user();
 	};
-	function user(val){
-		var now = Date.now();
+	var now = Date.now();
       //5FB51794-FCDC-1FE9-19E0-xxxxxxxxxxxx换成自己appkey
       var appKey = SHA1("A6099267504667"+"UZ"+"8FC0173C-B395-B797-D516-7A6CD23939B3"+"UZ"+now)+"."+now
-      var params={
-      	fields:{},
-      	fields: {},
-      	where: {
-      	},
-      	skip:0,
-      }
-      params=$api.jsonToStr(params);
-      api.ajax({
-      	url: 'http://d.apicloud.com/mcm/api/user?filter='+params,
-      	method: 'get',
-      	headers: {
-      		"X-APICloud-AppId": "A6099267504667",
-      		"X-APICloud-AppKey":   appKey
-      	},
+      function user(val){
 
-      },function(ret, err){
-      	if (ret) {
+      	var params={
+      		fields:{},
+      		fields: {},
+      		where: {
+      		},
+      		skip:0,
+      	}
+      	params=$api.jsonToStr(params);
+      	api.ajax({
+      		url: 'http://d.apicloud.com/mcm/api/user?filter='+params,
+      		method: 'get',
+      		headers: {
+      			"X-APICloud-AppId": "A6099267504667",
+      			"X-APICloud-AppKey":   appKey
+      		},
+
+      	},function(ret, err){
+      		if (ret) {
           // 隐藏下拉刷新
           // api.refreshHeaderLoadDone();
          // 模板渲染
@@ -93,15 +100,15 @@
      	});
      }
  });
-  }
-  function updateWareList(_data){
-  	var list=$api.byId('list');
-  	var tempFn=doT.template($api.byId('template').innerHTML);
-  	var resultText=tempFn(_data)
+      }
+      function updateWareList(_data){
+      	var list=$api.byId('list');
+      	var tempFn=doT.template($api.byId('template').innerHTML);
+      	var resultText=tempFn(_data)
   	// if (_LoadMore) {
   		// $api.append(list, resultText);
   	// }else{
-  		$api.append(list, resultText);
+  		$api.html(list, resultText);
   	// }
     // 优化
     api.parseTapmode();
@@ -114,7 +121,7 @@ function no(_id){
 	}, function(ret, err){
 		if( ret.buttonIndex==1 ){
 			api.ajax({
-				url: 'http://d.apicloud.com/mcm/api/shoppinginformation/'+_id,
+				url: 'http://d.apicloud.com/mcm/api/user/'+_id,
 				method: 'delete',
 				headers: {
 					"X-APICloud-AppId": "A6099267504667",
@@ -123,13 +130,111 @@ function no(_id){
 
 			},function(ret, err){
 				if (ret) {
-					getAddressList();
+					alert($api.jsonToStr(ret))
+					user();
 				} 
 			});
 
 		}else{
 			return;
 		}
+	});
+
+}
+
+function add(_id,_count){
+	if (_count==undefined) {
+		_count=0;
+
+	}
+	var dialogBox = api.require('dialogBox');
+	dialogBox.input({
+		keyboardType: 'default',
+		texts: {
+			title: '数量',
+			placeholder: _count,
+			leftBtnTitle: '确定',
+			rightBtnTitle: '取消'
+		},
+		styles: {
+			bg: '#fff',
+			corner: 2,
+			w: 300,
+			h: 240,
+			title: {
+				h: 60,
+				alignment: 'center',
+				size: 14,
+				color: '#000',
+				marginT:30,
+			},
+			input: {
+				h: 60,
+				y:30,
+				marginT:15,
+				marginLeft: 10,
+				marginRight:10,
+				textSize: 14,
+				textColor: '#000'
+			},
+			dividingLine: {
+				width: 0.5,
+				color: '#696969'
+			},
+			left: {
+				bg: 'rgba(0,0,0,0)',
+				color: '#007FFF',
+				size: 12
+			},
+			right: {
+				bg: 'rgba(0,0,0,0)',
+				color: '#007FFF',
+				size: 12
+			}
+		}
+	}, function(ret) {
+		if (ret.eventType == 'left') {
+			var dialogBox = api.require('dialogBox');
+			createcount(_id,ret.text)
+			dialogBox.close({
+				dialogName: 'input'
+			});
+		}else{
+			var dialogBox = api.require('dialogBox');
+			dialogBox.close({
+				dialogName: 'input'
+			});
+
+		}
+	});
+}
+
+function createcount(_id,_count){
+
+	api.ajax({
+		url: 'https://d.apicloud.com/mcm/api/user/'+_id,
+		method: 'put',
+		data: {
+			values:{
+				"count":_count,
+			}
+		},
+		headers: {
+			"X-APICloud-AppId": "A6099267504667",
+			"X-APICloud-AppKey":   appKey,
+		}
+	},function(ret, err){
+		if (ret) {
+			api.toast({
+				msg: '欧克了',
+				duration: 2000,
+				location: 'bottom'
+			});
+			user();
+
+			
+			
+		} 
 	});
 
 }
