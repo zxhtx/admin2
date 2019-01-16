@@ -174,7 +174,7 @@
 		// 		}, function(ret, err){ 
 		// 			if(ret){
 		// 				uploadAtavar(ret.data,_data);
-		
+
 		// 			}else{
 		// 				api.toast({
 		// 					msg: err.msg,
@@ -192,21 +192,15 @@
 		// 		});
 		// 	}
 		// });
-		api.getPicture({
-			sourceType: 'library ',
-			encodingType: 'jpg',
-			mediaValue: 'pic',
-			destinationType: 'url',
-			allowEdit: true,
-			quality: 50,
-			targetWidth: 100,
-			targetHeight: 100,
-			saveToPhotoAlbum: false
-		}, function(ret, err) {
+		var fileBrowser = api.require('fileBrowser');
+		fileBrowser.open(function(ret) {
 			if (ret) {
-				uploadAtavar(ret.data,_data);
-			} else {
-				alert(JSON.stringify(err));
+				fileBrowser.close();
+				uploadAtavar(ret.url,_data);
+				// alert($api.jsonToStr(ret))
+				
+
+
 			}
 		});
 
