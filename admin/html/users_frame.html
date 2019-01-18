@@ -46,7 +46,7 @@
 	{{~it:value:index}}
 
 	<tr>
-		<td>{{=index}}</td>
+		<td>{{=index+1}}</td>
 		<td >{{=value.username}}</td>
 		{{? value.count==undefined}}
 		<td  tapmode onclick="add('{{=value.id}}','{{=value.count}}')">0</td>

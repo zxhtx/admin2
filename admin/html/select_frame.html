@@ -53,10 +53,11 @@
 
 </body>
 <script type="text/template" id="template">
-	<tr> <th>时间</th> <th>商品名称</th><th>介绍</th><th>价格</th><th>颜色</th><th>码子</th><th>商家</th><th>收货地址</th><th>收货人</th><th>电话</th><th>用户</th><th>单号</th><th>收款图</th><th>商品图</th><th>是否支付</th><th>删除</th></tr>
+	<tr><th>序号</th><th>商品名称</th><th>介绍</th><th>价格</th><th>颜色</th><th>码子</th><th>商家</th><th>收货地址</th><th>收货人</th><th>电话</th><th>用户</th><th>单号</th><th>收款图</th><th>商品图</th><th>是否支付</th><th>删除</th></tr>
 	{{~it:value:index}}
-	<tr>
-		<td>{{=value.createdAt}}</td>
+	{{? value.dindantypeid=='5c2a39add37a824c5ac6cc64'}}
+	<tr class="red">
+		<td>{{=index+1}}</td>
 		<td>{{=value.warename}}</td>
 		<td tapmode onclick="fuzhi('{{=value.description}}')" >{{=value.description}}</td>
 		<td class="blue">{{=value.price}}</td>
@@ -91,6 +92,45 @@
 
 		<td class="red" tapmode onclick="no('{{=value.id}}')">删除</td>
 	</tr>
+
+	{{??}}
+	<tr>
+		<td>{{=index+1}}</td>
+		<td>{{=value.warename}}</td>
+		<td tapmode onclick="fuzhi('{{=value.description}}')" >{{=value.description}}</td>
+		<td class="blue">{{=value.price}}</td>
+		<td class="red">{{=value.color}}</td>
+		<td class="red">{{=value.size}}</td>
+		<td class="red">{{=value.shangjia}}</td>
+		<td tapmode onclick="fuzhi('{{=value.address}}{{=value.house}}')">{{=value.address}}{{=value.house}}</td>
+		<td tapmode onclick="fuzhi('{{=value.shoppingname}}')" >{{=value.shoppingname}}</td>
+		<td tapmode onclick="fuzhi('{{=value.mobile}}')">{{=value.mobile}}</td>
+		<td>{{=value.username}}</td>
+		
+
+		{{? value.danhao }}
+		<td class="danhao">{{=value.danhao}}</td>
+		{{?? value.priceimg==null}}
+		<td class="red">不可操作</td>
+		{{??}}
+		<td class="green" tapmode onclick="adddanhao('{{=value.id}}')">上传单号</td>
+		{{?}}
+
+		{{? value.priceimg==null}}
+		<td class="red">不可操作</td>
+		{{??}}
+		<td class="green" tapmode onclick="openimgWin('{{=value.priceimg}}')">点击查看</td>
+		{{?}}
+		<td class="green" tapmode onclick="openimgWin('{{=value.url}}')">点击查看</td>
+		{{? value.priceimg==null}}
+		<td class="red">未支付</td>
+		{{??}}
+		<td class="green">已支付</td>
+		{{?}}
+
+		<td class="red" tapmode onclick="no('{{=value.id}}')">删除</td>
+	</tr>
+	{{?}}
 	{{~}} 
 
 </script>
@@ -329,19 +369,19 @@ function no(_id){
 }
 
 function fuzhi(_data){
-	 var clipBoard = api.require('clipBoard');
-          clipBoard.set({
-            value: _data
-        }, function(ret, err) {
-            if (ret) {
-                api.toast({
-                    msg: '复制成功',
-                    duration: 2000,
-                    location: 'bottom'
-                });
+	var clipBoard = api.require('clipBoard');
+	clipBoard.set({
+		value: _data
+	}, function(ret, err) {
+		if (ret) {
+			api.toast({
+				msg: '复制成功',
+				duration: 2000,
+				location: 'bottom'
+			});
 
-            }
-        });
+		}
+	});
 }
 
 </script>
