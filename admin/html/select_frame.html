@@ -109,7 +109,7 @@
 		
 
 		{{? value.danhao }}
-		<td class="danhao">{{=value.danhao}}</td>
+		<td class="danhao"  tapmode onclick="adddanhao('{{=value.id}}')" >{{=value.danhao}}</td>
 		{{?? value.priceimg==null}}
 		<td class="red">不可操作</td>
 		{{??}}
