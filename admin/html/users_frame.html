@@ -42,7 +42,7 @@
 	</table>
 </body>
 <script type="text/template" id="template">
-<tr><th>index</th> <th>用户</th><th>推荐人数</th><th>删除</th></tr>
+<tr><th>index</th> <th>用户</th><th>推荐人数</th><th>vip</th><th>vip时间</th><th>删除</th></tr>
 	{{~it:value:index}}
 
 	<tr>
@@ -53,6 +53,19 @@
 		{{??}}
 		<td  tapmode onclick="add('{{=value.id}}','{{=value.count}}')">{{=value.count}}</td>
 		{{?}}
+
+		{{? value.vip==undefined}}
+		<td  tapmode onclick="addtwo('{{=value.id}}','{{=value.vip}}')">0</td>
+		{{??}}
+		<td  tapmode onclick="addtwo('{{=value.id}}','{{=value.vip}}')">{{=value.vip}}</td>
+		{{?}}
+
+		{{? value.date==undefined}}
+		<td  tapmode onclick="adddate('{{=value.id}}','{{=value.date}}')">0</td>
+		{{??}}
+		<td  tapmode onclick="adddate('{{=value.id}}','{{=value.date}}')">{{=value.date}}</td>
+		{{?}}
+
 		<td class="red" tapmode onclick="no('{{=value.id}}')">删除</td>
 	</tr>
 	{{~}}
@@ -73,13 +86,14 @@
       	var params={
       		fields:{},
       		fields: {},
-      		where: {
+      		where:{
       		},
       		skip:0,
+      		limit:999999
       	}
       	params=$api.jsonToStr(params);
       	api.ajax({
-      		url: 'http://d.apicloud.com/mcm/api/user?filter='+params,
+      		url: 'https://d.apicloud.com/mcm/api/user?filter='+params,
       		method: 'get',
       		headers: {
       			"X-APICloud-AppId": "A6099267504667",
@@ -216,6 +230,201 @@ function createcount(_id,_count){
 		data: {
 			values:{
 				"count":_count,
+			}
+		},
+		headers: {
+			"X-APICloud-AppId": "A6099267504667",
+			"X-APICloud-AppKey":   appKey,
+		}
+	},function(ret, err){
+		if (ret) {
+			api.toast({
+				msg: '欧克了',
+				duration: 2000,
+				location: 'bottom'
+			});
+			user();
+
+			
+			
+		} 
+	});
+
+}
+
+
+function addtwo(_id,_vip){
+	if (_vip==undefined) {
+		_vip=0;
+
+	}
+	var dialogBox = api.require('dialogBox');
+	dialogBox.input({
+		keyboardType: 'default',
+		texts: {
+			title: '数量',
+			placeholder: _vip,
+			leftBtnTitle: '确定',
+			rightBtnTitle: '取消'
+		},
+		styles: {
+			bg: '#fff',
+			corner: 2,
+			w: 300,
+			h: 240,
+			title: {
+				h: 60,
+				alignment: 'center',
+				size: 14,
+				color: '#000',
+				marginT:30,
+			},
+			input: {
+				h: 60,
+				y:30,
+				marginT:15,
+				marginLeft: 10,
+				marginRight:10,
+				textSize: 14,
+				textColor: '#000'
+			},
+			dividingLine: {
+				width: 0.5,
+				color: '#696969'
+			},
+			left: {
+				bg: 'rgba(0,0,0,0)',
+				color: '#007FFF',
+				size: 12
+			},
+			right: {
+				bg: 'rgba(0,0,0,0)',
+				color: '#007FFF',
+				size: 12
+			}
+		}
+	}, function(ret) {
+		if (ret.eventType == 'left') {
+			var dialogBox = api.require('dialogBox');
+			createvip(_id,ret.text)
+			dialogBox.close({
+				dialogName: 'input'
+			});
+		}else{
+			var dialogBox = api.require('dialogBox');
+			dialogBox.close({
+				dialogName: 'input'
+			});
+
+		}
+	});
+}
+
+function createvip(_id,_vip){
+
+	api.ajax({
+		url: 'https://d.apicloud.com/mcm/api/user/'+_id,
+		method: 'put',
+		data: {
+			values:{
+				"vip":_vip,
+			}
+		},
+		headers: {
+			"X-APICloud-AppId": "A6099267504667",
+			"X-APICloud-AppKey":   appKey,
+		}
+	},function(ret, err){
+		if (ret) {
+			api.toast({
+				msg: '欧克了',
+				duration: 2000,
+				location: 'bottom'
+			});
+			user();
+
+			
+			
+		} 
+	});
+
+}
+
+function adddate(_id,_date){
+	if (_date==undefined) {
+		_date=0;
+
+	}
+	var dialogBox = api.require('dialogBox');
+	dialogBox.input({
+		keyboardType: 'default',
+		texts: {
+			title: '数量',
+			placeholder: _date,
+			leftBtnTitle: '确定',
+			rightBtnTitle: '取消'
+		},
+		styles: {
+			bg: '#fff',
+			corner: 2,
+			w: 300,
+			h: 240,
+			title: {
+				h: 60,
+				alignment: 'center',
+				size: 14,
+				color: '#000',
+				marginT:30,
+			},
+			input: {
+				h: 60,
+				y:30,
+				marginT:15,
+				marginLeft: 10,
+				marginRight:10,
+				textSize: 14,
+				textColor: '#000'
+			},
+			dividingLine: {
+				width: 0.5,
+				color: '#696969'
+			},
+			left: {
+				bg: 'rgba(0,0,0,0)',
+				color: '#007FFF',
+				size: 12
+			},
+			right: {
+				bg: 'rgba(0,0,0,0)',
+				color: '#007FFF',
+				size: 12
+			}
+		}
+	}, function(ret) {
+		if (ret.eventType == 'left') {
+			var dialogBox = api.require('dialogBox');
+			createdate(_id,ret.text)
+			dialogBox.close({
+				dialogName: 'input'
+			});
+		}else{
+			var dialogBox = api.require('dialogBox');
+			dialogBox.close({
+				dialogName: 'input'
+			});
+
+		}
+	});
+}
+
+function createdate(_id,_date){
+
+	api.ajax({
+		url: 'https://d.apicloud.com/mcm/api/user/'+_id,
+		method: 'put',
+		data: {
+			values:{
+				"date":_date,
 			}
 		},
 		headers: {
