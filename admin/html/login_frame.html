@@ -43,7 +43,7 @@
         text-align: center;
         border-radius: 8px;
     }
-    
+
     
     .highlight {
         opacity: 0.7;
@@ -91,7 +91,7 @@
     });
       return;
   }else{
-    
+
   }
   api.ajax({
     url: 'http://d.apicloud.com/mcm/api/user/login',
@@ -116,15 +116,15 @@
         location: 'bottom'
     });
      api.openWin({
-        name: 'main',
-        url: './main.html',
+        name: 'index',
+        url: '../index.html',
         pageParam: {
             wareId: api.pageParam.ware
         }
     });
-     
-     
-     
+
+
+
  } else {
     api.toast({
         msg: '账号或密码错误',
