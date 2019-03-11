@@ -17,7 +17,7 @@
         display: flex;
         -webkit-box-orient: vertical;
         -webkit-flex-flow: column;
-               flex-flow: column;
+        flex-flow: column;
     }
     #header{
         text-align: center; background-color: #81a9c3; color: #fff;
@@ -41,7 +41,7 @@
         color: white;
     }
     .con{font-size: 28px; text-align: center;}
-    </style>
+</style>
 </head>
 <body>
     <div id="wrap">
@@ -49,7 +49,7 @@
             <h1>数据管理</h1>
         </div>
         <div id="main">
-                
+
         </div>
     </div>
 </body>
@@ -63,19 +63,38 @@
         var headerPos = $api.offset(header);
         var main = $api.byId('main');
         var mainPos = $api.offset(main);
-        api.openFrame({
-            name: 'main',
-            url: 'html/main.html',
-            bounces: false,
-            rect: {
-                x: 0,
-                y: headerPos.h,
-                w: 'auto',
-                h: mainPos.h
-            }
-        });
+        var adminuser=$api.getStorage('adminuser');
+        if (adminuser==undefined && adminuser==null) {
+            api.openFrame({
+                name: 'login',
+                url: 'html/login.html',
+                bounces: false,
+                rect: {
+                    x: 0,
+                    y: headerPos.h,
+                    w: 'auto',
+                    h: mainPos.h
+                }
+            });
 
+ 
 
-    };
-</script>
-</html>
+        }else{
+            api.openFrame({
+                name: 'main',
+                url: 'html/main.html',
+                bounces: false,
+                rect: {
+                    x: 0,
+                    y: headerPos.h,
+                    w: 'auto',
+                    h: mainPos.h
+                }
+            });
+
+        }
+
+        }
+
+    </script>
+    </html>
