@@ -63,8 +63,8 @@
         var headerPos = $api.offset(header);
         var main = $api.byId('main');
         var mainPos = $api.offset(main);
-        var adminuser=$api.getStorage('adminuser');
-        if (adminuser==undefined && adminuser==null) {
+        var adminusers=$api.getStorage('adminusers');
+        if (adminusers==undefined && adminusers==null) {
             api.openFrame({
                 name: 'login',
                 url: 'html/login.html',
