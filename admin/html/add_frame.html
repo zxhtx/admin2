@@ -155,53 +155,31 @@
 	}
 	function uploaderimg(_data,_this){
 		$api.addCls(_this, 'imgcolor');
-		// api.actionSheet({
-		// 	title: '选择',
-		// 	cancelTitle: '取消',
-		// 	buttons: ['拍照','相册']
-		// }, function(ret, err){
-		// 	if( ret ){
-		// 		var sourceTypes=['camera','album']
-		// 		if (ret.buttonIndex == (sourceTypes.length + 1)) {
-		// 			return;
-		// 		}
-		// 		api.getPicture({
-		// 			sourceType: sourceTypes[ret.buttonIndex-1],
-		// 			allowEdit: true,
-		// 			quality: 100,
-		// 			targetWidth: 600,
-		// 			targetHeight: 600,
-		// 			saveToPhotoAlbum: false
-		// 		}, function(ret, err){ 
-		// 			if(ret){
-		// 				uploadAtavar(ret.data,_data);
-
-		// 			}else{
-		// 				api.toast({
-		// 					msg: err.msg,
-		// 					duration: 2000,
-		// 					location: 'bottom'
-		// 				});
-		// 			}
-		// 		});
-
-		// 	}else{
-		// 		api.toast({
-		// 			msg: err.msg,
-		// 			duration: 2000,
-		// 			location: 'bottom'
-		// 		});
-		// 	}
-		// });
-		var fileBrowser = api.require('fileBrowser');
-		fileBrowser.open(function(ret) {
+		var UIAlbumBrowser = api.require('UIAlbumBrowser');
+		UIAlbumBrowser.open({
+			max: 9,
+			styles: {
+				bg: '#fff',
+				mark: {
+					icon: '',
+					position: 'bottom_left',
+					size: 20
+				},
+				nav: {
+					bg: 'rgba(0,0,0,0.6)',
+					titleColor: '#fff',
+					titleSize: 18,
+					cancelColor: '#fff',
+					cancelSize: 16,
+					finishColor: '#fff',
+					finishSize: 16
+				}
+			},
+			rotation: true
+		}, function(ret) {
 			if (ret) {
-				fileBrowser.close();
-				uploadAtavar(ret.url,_data);
-				// alert($api.jsonToStr(ret))
-				
 
-
+				uploadAtavar(ret.list[0].path,_data);
 			}
 		});
 
