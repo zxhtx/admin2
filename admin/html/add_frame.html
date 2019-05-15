@@ -53,12 +53,12 @@
 			<td>
 				<select id="test" tapmode onchange="select()" name="">
 					<option value="">请选择</option>
-					<option value="5c6e5cc2d772329a6f2562dd">微商</option>
+					<!-- <option value="5c6e5cc2d772329a6f2562dd">微商</option>
 					<option value="56c80da883af652643474b6b">男鞋</option>
 					<option value="56c80db78d04c83d3d1dedea">女鞋</option>
 					<option value="56c80dc031da9e480de1cb49">男装</option>
-					<option value="56c80dc383af652643474b6d">女装</option>
-					<option value="56c80dc88d04c83d3d1dedf3">配件</option>
+					<option value="56c80dc383af652643474b6d">女装</option> -->
+					<option value="5cdbbff7bb71b97347c883c1">配件</option>
 				</select>
 			</td>
 		</tr>
@@ -67,7 +67,7 @@
 			<td><input type="text" id="name"></td>
 		</tr>
 		<tr>
-			<th>介绍</th>
+			<th>商品介绍</th>
 			<td><input type="text" id="jieshao"></td>
 			
 		</tr>
@@ -78,7 +78,7 @@
 
 		</tr>
 		<tr>
-			<th>码数</th>
+			<th>尺码</th>
 			<td><input type="text" id="size"></td>
 			
 		</tr>
@@ -90,42 +90,42 @@
 
 		</tr>
 		<tr>
-			<th>商家</th>
+			<th>商家(货源)</th>
 			<td><input type="text" id="shangjia"></td>
 			
 
 		</tr>
 		<tr>
-			<th>封面</th>
+			<th>封面(app显示商品的封面)</th>
 			<td tapmode onclick="uploaderimg(6,this)">上传图片</td>
 			
 
 		</tr>
 		
 		<tr>
-			<th>轮播图0</th>
+			<th>轮播图1</th>
 			<td tapmode onclick="uploaderimg(0,this)">上传图片</td>
 			
 
 		</tr>
 		<tr>
-			<th>轮播图1</th>
+			<th>轮播图2</th>
 			<td tapmode onclick="uploaderimg(1,this)">上传图片</td>
 
 		</tr>
 		
 		<tr>
-			<th>轮播图2</th>
+			<th>轮播图3</th>
 			<td tapmode onclick="uploaderimg(2,this)">上传图片</td>
 			
 		</tr>
 		<tr>
-			<th>轮播图3</th>
+			<th>轮播图4</th>
 			<td tapmode onclick="uploaderimg(3,this)">上传图片</td>
 
 		</tr>
 		<tr>
-			<th>轮播图4</th>
+			<th>轮播图5</th>
 			<td tapmode onclick="uploaderimg(4,this)">上传图片</td>
 			
 		</tr>
@@ -292,7 +292,7 @@
 						wareInfoId=ret.id;
 						addInfo.wareInfo=ret.id;
 						api.toast({
-							msg: '上传成功',
+							msg: '图片上传成功',
 							duration: 2000,
 							location: 'bottom'
 						});
@@ -315,7 +315,7 @@
 				},function(ret, err){
 					if (ret) {
 						api.toast({
-							msg: '上传成功',
+							msg: '图片上传成功',
 							duration: 2000,
 							location: 'bottom'
 						});
@@ -338,7 +338,7 @@
 				},function(ret, err){
 					if (ret) {
 						api.toast({
-							msg: '上传成功',
+							msg: '图片上传成功',
 							duration: 2000,
 							location: 'bottom'
 						});
@@ -361,7 +361,7 @@
 				},function(ret, err){
 					if (ret) {
 						api.toast({
-							msg: '上传成功',
+							msg: '图片上传成功',
 							duration: 2000,
 							location: 'bottom'
 						});
@@ -385,7 +385,7 @@
 				},function(ret, err){
 					if (ret) {
 						api.toast({
-							msg: '上传成功',
+							msg: '图片上传成功',
 							duration: 2000,
 							location: 'bottom'
 						});
@@ -411,7 +411,7 @@
 				},function(ret, err){
 					if (ret) {
 						api.toast({
-							msg: '上传成功',
+							msg: '商品上传成功',
 							duration: 2000,
 							location: 'bottom'
 						});
