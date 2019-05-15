@@ -178,7 +178,10 @@
 			rotation: true
 		}, function(ret) {
 			if (ret) {
+				// if () {
 
+				// }
+				alert($api.jsonToStr(ret.list))
 				uploadAtavar(ret.list[0].path,_data);
 			}
 		});
